@@ -1,0 +1,51 @@
+[user]
+	name = Aleksandr Denisenko
+	email = denisenko@qarea.com
+[color]
+	ui = true
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red
+  new = green
+[grep]
+	lineNumber = true
+[alias]
+	edit = !$EDITOR -p $(git status -s | awk '{print $2}')
+
+	br = branch
+	fe = fetch
+	co = checkout
+	new = checkout -b
+	cob = checkout -b
+	cod = checkout dev
+	cot = checkout dev-temp
+
+	md = merge origin/dev
+	mt = merge origin/dev-temp
+
+	cp = cherry-pick
+	st = status -s
+	ci = commit
+	ca = commit -a
+	po = push origin
+
+	f = "!git ls-files | grep -i"
+	grep = grep -Ii
+	gr = grep -Ii
+
+	df = diff --word-diff
+	dc = diff --cached
+
+	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+	ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+
+	la = "!git config -l | grep alias | cut -c 7-"
+
