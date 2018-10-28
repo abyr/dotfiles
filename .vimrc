@@ -1,28 +1,49 @@
 " .vimrc
 
+set background=dark
+colorscheme hybrid
 
 " plugins
 
 call plug#begin('~/.vim/plugged')
-Plug 'ap/vim-buftabline'
-Plug 'airblade/vim-gitgutter'
+" colors
+Plug 'vim-scripts/ScrollColors'
+Plug 'w0ng/vim-hybrid'
+" browser
+Plug 'scrooloose/nerdtree'
 Plug 'corntrace/bufexplorer'
+Plug 'ap/vim-buftabline'
+Plug 'itchyny/lightline.vim'
+Plug 'ervandew/supertab'
+" git
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
+" ide
+Plug 'kien/ctrlp.vim'
+Plug 'vim-scripts/taglist.vim'
+" Plug 'marijnh/tern_for_vim'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'tpope/vim-surround'
+Plug 'mattn/emmet-vim'
+Plug 'tpope/vim-commentary'
+" linter
+Plug 'w0rp/ale'
+" langs
 Plug 'editorconfig/editorconfig-vim'
 Plug 'elzr/vim-json'
-Plug 'ervandew/supertab'
-Plug 'itchyny/lightline.vim'
-Plug 'kien/ctrlp.vim'
-Plug 'marijnh/tern_for_vim'
-Plug 'mattn/emmet-vim'
-Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'vim-scripts/ScrollColors'
-Plug 'vim-scripts/vimwiki'
-Plug 'w0rp/ale'
+Plug 'stanangeloff/php.vim'
+Plug 'evidens/vim-twig'
+" writing
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
 Plug 'reedes/vim-pencil'
+" organiser
+" Plug 'mhinz/vim-startify'
+Plug 'vimwiki/vimwiki'
+Plug 'farseer90718/vim-taskwarrior'
+Plug 'itchyny/calendar.vim'
 call plug#end()
-
 
 " settings
 
@@ -32,7 +53,6 @@ if filereadable(expand("~/.vimrc.before"))
 	source ~/.vimrc.before
 endif
 
-colorscheme slate
 
 filetype off
 filetype plugin indent on
@@ -78,6 +98,8 @@ set novisualbell
 autocmd BufWritePre * :%s/\s\+$//e
 
 au BufReadPost *.mustache set syntax=html
+au BufNewFile,BufRead *.html.twig set syntax=html
+
 " Fix <Enter> for comment
 set fo+=cr
 
@@ -89,21 +111,29 @@ set statusline+=%*
 
 " hotkeys
 
+" rus
+nmap <C-ш> i
+
 imap jj <Esc>
 imap kk <Esc> :w<cr>
 imap kj <Esc> :wq<cr>
-nmap kd <Esc> :q!<cr>
+nmap \ff <Esc> :ALEFix<cr>
 
 nmap <C-h> :bnext<CR>
-
+nmap <S-h> :bprevious<CR>
 nmap <C-l> :NERDTreeFind<cr>
 nmap <C-i> :ALEToggle<cr>
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
-" nmap <C-i> :SyntasticToggleMode<cr>
+
 " F3 - File browser
 nmap <F3> :NERDTreeToggle<cr>
 imap <F3> <esc>:NERDTreeToggle<cr>
+
+
+" tags
+nnoremap <silent> <F4> :TlistToggle<CR>
+
 " buffers
 " F5 - show buffers
 nmap <F5> <Esc>:BufExplorer<cr>
@@ -117,6 +147,9 @@ imap <F6> <esc>:bp<cr>i
 map <F7> :bn<cr>
 vmap <F7> <esc>:bn<cr>i
 imap <F7> <esc>:bn<cr>i
+" writing prose
+map <F8> :Goyo <bar> :Limelight!! <bar> :TogglePencil <CR>
+nmap <C-\> :setlocal spell! <cr>
 " F9 - exit
 set wildmenu
 set wcm=<Tab>
@@ -131,7 +164,7 @@ nmap <silent> <C-Up> :wincmd k<CR>
 nmap <silent> <C-Down> :wincmd j<CR>
 nmap <silent> <C-Left> :wincmd h<CR>
 nmap <silent> <C-Right> :wincmd l<CR>
-" resize horzontal split window
+" resize horizontal split window
 nmap <silent> <C-S-Down> <C-W>-<C-W>-
 nmap <silent> <C-S-Up> <C-W>+<C-W>+
 " resize vertical split window
@@ -141,19 +174,27 @@ nmap <silent> <C-S-Right> <C-W><<C-W><
 
 " plugins settings
 
-let g:ale_linters = {'javascript': ['eslint']}
+let Tlist_Use_Right_Window = 1
+let Tlist_Sort_Type = "name"
+let Tlist_WinWidth = 40
+
+let g:ale_linters = {'javascript': ['eslint'], 'php': ['php']}
+let g:ale_fixers = {}
+let g:ale_fixers.javascript = ['eslint']
 
 if exists("g:ctrl_user_command")
 	unlet g:ctrlp_user_command
 endif
+
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/vendor/*,*/\.git/*
 set wildignore+=*.pyc*,*.sql*
 set wildignore+=*/node_modules/*
-set wildignore+=*js-build/*
 set wildignore+=*log*,*.sh*
 set wildignore+=*.py*
 set wildignore+=*.css*
+
 let g:ctrlp_clear_cache_on_exit=0
+
 set complete=""
 set complete+=.
 set complete+=k
@@ -162,4 +203,16 @@ set completeopt-=preview
 set completeopt+=longest
 set suffixesadd+=.js
 
-let g:notes_directories = ['~/Dropbox/Shared Notes']
+let g:gutentags_cache_dir = '~/.vim/gutentags'
+let g:gutentags_ctags_exclude = ['*.css', '*.html', '*.js', '*.json', '*.xml', '*.phar', '*.ini', '*.rst', '*.md',
+                            \ '*vendor/*/test*', '*vendor/*/Test*', '*vendor/*/fixture*', '*vendor/*/Fixture*',
+                            \ '*var/cache*', '*var/log*', '*app/cache', '*app/logs']
+
+let g:limelight_conceal_ctermfg = 241
+
+let g:calendar_google_calendar = 1
+let g:calendar_google_task = 1
+
+let g:vimwiki_list = [{'path': '~/Dropbox/vimwiki/personal'}, {'path': '~/Dropbox/vimwiki/work'}]
+
+"
