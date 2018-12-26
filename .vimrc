@@ -11,7 +11,7 @@ Plug 'vim-scripts/ScrollColors'
 Plug 'w0ng/vim-hybrid'
 " browser
 Plug 'scrooloose/nerdtree'
-Plug 'corntrace/bufexplorer'
+Plug 'jlanzarotta/bufexplorer'
 Plug 'ap/vim-buftabline'
 Plug 'itchyny/lightline.vim'
 Plug 'ervandew/supertab'
@@ -22,7 +22,7 @@ Plug 'junegunn/gv.vim'
 " ide
 Plug 'kien/ctrlp.vim'
 Plug 'vim-scripts/taglist.vim'
-" Plug 'marijnh/tern_for_vim'
+Plug 'marijnh/tern_for_vim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'tpope/vim-surround'
 Plug 'mattn/emmet-vim'
@@ -98,6 +98,7 @@ set novisualbell
 autocmd BufWritePre * :%s/\s\+$//e
 
 au BufReadPost *.mustache set syntax=html
+au BufNewFile,BufRead *.ejs set filetype=html
 au BufNewFile,BufRead *.html.twig set syntax=html
 
 " Fix <Enter> for comment
@@ -178,8 +179,8 @@ let Tlist_Use_Right_Window = 1
 let Tlist_Sort_Type = "name"
 let Tlist_WinWidth = 40
 
-let g:ale_linters = {'javascript': ['eslint'], 'php': ['php']}
-let g:ale_fixers = {}
+let g:ale_linters = {'javascript': ['jshint'], 'php': ['php'], 'python': ['flake8']}
+let g:ale_fixers = {'python': ['autopep8']}
 let g:ale_fixers.javascript = ['eslint']
 
 if exists("g:ctrl_user_command")
@@ -213,6 +214,8 @@ let g:limelight_conceal_ctermfg = 241
 let g:calendar_google_calendar = 1
 let g:calendar_google_task = 1
 
-let g:vimwiki_list = [{'path': '~/Dropbox/vimwiki/personal'}, {'path': '~/Dropbox/vimwiki/work'}]
+let g:vimwiki_list = [
+  \ {'path': '~/Dropbox/vimwiki/personal', 'ext': '.md'},
+  \ {'path': '~/Dropbox/vimwiki/work', 'ext': '.md'}]
 
 "
