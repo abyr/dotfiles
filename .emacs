@@ -1,7 +1,10 @@
 (require 'package)
 
+(setq inhibit-startup-screen t)
+
 ;; If you want to use latest version
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+
 ;; If you want to use last tagged version
 ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
@@ -46,10 +49,17 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (web-mode color-theme auto-complete))))
+ '(package-selected-packages (quote (git-gutter org web-mode color-theme auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; The following lines are always needed.
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-switchb)
+		
