@@ -14,27 +14,6 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
-(color-theme-initialize)
-(color-theme-classic)
-
-;; commands
-(defun insert-date (arg)
-  (interactive "P")
-  (insert (if arg
-              (format-time-string "%d.%m.%Y")
-            (format-time-string "%Y.%m.%d"))))
-
-(defun insert-day (arg)
-  (interactive "P")
-  (insert (if arg
-              (format-time-string "%d.%m.%Y")
-            (format-time-string "%Y.%m.%d %A"))))
-
-(defun insert-timestamp ()
-  (interactive)
-  (insert (format-time-string "%Y-%m-%dT%H:%M:%S")))
-
-
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
@@ -65,15 +44,16 @@
 (setq font-lock-maximum-decoration t)
 (show-paren-mode t)
 
+(set-face-attribute 'default nil :height 200)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ecb-options-version "2.50")
  '(package-selected-packages
    (quote
-    (typescript-mode cedit ecb git-gutter org web-mode color-theme auto-complete))))
+    (org-link-minor-mode git-gutter org web-mode color-theme auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -81,14 +61,23 @@
  ;; If there is more than one, they won't work right.
  )
 
+(load-theme 'wombat t)
+
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
+
+(add-to-list 'auto-mode-alist '("\\.org'" . org-mode))
+
 (setq org-todo-keywords '((sequence "TODO" "NEXT" "|" "DONE" "CANCELED")))
 
+;; The following lines are always needed.
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 
-(setq org-agenda-files (quote ("~/Dropbox/Org/")))
+(setq org-agenda-files (quote ("~/Dropbox/Org")))
 
 (setq org-log-done t)
 
+(put 'upcase-region 'disabled nil)
