@@ -44,16 +44,15 @@
 (setq font-lock-maximum-decoration t)
 (show-paren-mode t)
 
-(set-face-attribute 'default nil :height 200)
+;; (set-face-attribute 'default nil :height 150)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (org-link-minor-mode typescript-mode cedit ecb git-gutter org web-mode color-theme auto-complete))))
+ '(org-agenda-files (quote ("/run/media/denysenko/KINGSTON/OrgFiles/home.org")))
+ '(package-selected-packages (quote (org-link-minor-mode typescript-mode cedit ecb git-gutter org web-mode color-theme auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -66,6 +65,18 @@
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 
+
+;; development
+
+ '(ecb-compile-window-height 0.25)
+ '(ecb-compile-window-temporally-enlarge (quote after-selection))
+ '(ecb-compile-window-width (quote edit-window))
+ '(ecb-enlarged-compilation-window-max-height (quote best))
+ '(ecb-layout-name "mylayout")
+ '(ecb-options-version "2.40")  ;; I think this is automatic?
+
+;; organization
+
 (add-to-list 'auto-mode-alist '("\\.org'" . org-mode))
 
 (setq org-todo-keywords '((sequence "TODO" "NEXT" "|" "DONE" "CANCELED")))
@@ -76,8 +87,29 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 
-(setq org-agenda-files (quote ("~/Dropbox/Org")))
+;; local dropbox
+(setq org-agenda-files (quote ("~/OrgFiles")))
+(setq org-agenda-diary-file  "~/OrgFiles/diary.org")
+;; flash drive
 
 (setq org-log-done t)
 
+;; blog
+;; (load "~/Blog/packages/blog")
+
 (put 'upcase-region 'disabled nil)
+
+
+;; commands
+
+(defun kill-whitespace ()
+  "Kill the whitespace between two non-whitespace characters"
+  (interactive "*")
+  (save-excursion
+    (save-restriction
+      (save-match-data
+	(progn
+	  (re-search-backward "[^ \t\r\n]" nil t)
+	  (re-search-forward "[ \t\r\n]+" nil t)
+	  (replace-match "" nil nil))))))
+
