@@ -1,12 +1,20 @@
-" .vimrc
+" TOC
+" theming
+" plugins
+" settings
+" hotkeys
+" plugins_settings
+" vimwiki_settings
 
-"set background=dark
+" theming
+set background=dark
 "colorscheme hybrid
-set background=light
+" set background=light
 colorscheme PaperColor
 
-" plugins
+set guifont=Monospace\ 12
 
+" plugins
 call plug#begin('~/.vim/plugged')
 " colors
 Plug 'vim-scripts/ScrollColors'
@@ -25,6 +33,7 @@ Plug 'junegunn/gv.vim'
 Plug 'kien/ctrlp.vim'
 Plug 'vim-scripts/taglist.vim'
 Plug 'tpope/vim-commentary'
+Plug 'mikelue/vim-maven-plugin'
 " langs
 Plug 'editorconfig/editorconfig-vim'
 " writing
@@ -33,13 +42,11 @@ Plug 'junegunn/limelight.vim'
 Plug 'reedes/vim-pencil'
 " organiser
 Plug 'vimwiki/vimwiki'
+Plug 'tpope/vim-speeddating'
+Plug 'jceb/vim-orgmode'
 call plug#end()
 
 " settings
-
-let use_ale = 0
-let use_syntastic = 0
-
 set nocompatible
 
 if filereadable(expand("~/.vimrc.before"))
@@ -57,6 +64,7 @@ set nobackup
 set nowb
 
 set nu
+set rnu
 set backspace=indent,eol,start
 set shortmess=a
 set softtabstop=2
@@ -92,11 +100,12 @@ autocmd BufWritePre * :%s/\s\+$//e
 au BufReadPost *.mustache set syntax=html
 au BufNewFile,BufRead *.ejs set filetype=html
 au BufNewFile,BufRead *.html.twig set syntax=html
+au BufRead,BufNewFile *.less set syntax=css
 
 " Fix <Enter> for comment
 set fo+=cr
 
-" status line format
+" status_line format
 " http://tdaly.co.uk/projects/vim-statusline-generator/
 set laststatus=2
 
@@ -158,24 +167,46 @@ augroup END
 
 
 " hotkeys
+" copy_paste
+vnoremap <C-c> "+y
+map <C-k> "+p
 
+" Arrow keys remapping
+" switch prev/next buffer
+noremap <Left> :bp<CR>
+noremap <Right> :bn<CR>
+noremap <Up> :bn<CR>
+noremap <Down> :bp<CR>
+" switch window
+nmap <silent> <C-Up> :wincmd k<CR>
+nmap <silent> <C-Down> :wincmd j<CR>
+nmap <silent> <C-Left> :wincmd h<CR>
+nmap <silent> <C-Right> :wincmd l<CR>
+" resize horizontal/vertical split window
+nmap <silent> <C-S-Down> <C-W>-<C-W>-
+nmap <silent> <C-S-Up> <C-W>+<C-W>+
+nmap <silent> <C-S-Left> <C-W><<C-W><
+nmap <silent> <C-S-Right> <C-W>><C-W>>
+
+" bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+" normal
 imap jj <Esc>
+" save
 imap kk <Esc> :w<cr>
+" save + quit
 imap kj <Esc> :wq<cr>
-nmap \ff <Esc> :ALEFix<cr>
 
-nmap <C-h> :bnext<CR>
-nmap <S-h> :bprevious<CR>
 nmap <C-l> :NERDTreeFind<cr>
+" F6 <--> F7
 
 " F3 - File browser
 nmap <F3> :NERDTreeToggle<cr>
 imap <F3> <esc>:NERDTreeToggle<cr>
 
-
 " tags
 nnoremap <silent> <F4> :TlistToggle<CR>
-" nmap <F8> :TagbarToggle<CR>
 
 " buffers
 " F5 - show buffers
@@ -190,9 +221,11 @@ imap <F6> <esc>:bp<cr>i
 map <F7> :bn<cr>
 vmap <F7> <esc>:bn<cr>i
 imap <F7> <esc>:bn<cr>i
+
 " writing prose
 map <F8> :Goyo <bar> :Limelight!! <bar> :TogglePencil <CR>
 nmap <C-\> :setlocal spell! <cr>
+
 " F9 - exit
 set wildmenu
 set wcm=<Tab>
@@ -202,21 +235,9 @@ menu Exit.save :exit<CR>
 menu Exit.bdelete :bdelete<CR>
 menu Exit.bdelete! :bdelete!<CR>
 map <F9> :emenu Exit.<Tab>
-" switch window
-nmap <silent> <C-Up> :wincmd k<CR>
-nmap <silent> <C-Down> :wincmd j<CR>
-nmap <silent> <C-Left> :wincmd h<CR>
-nmap <silent> <C-Right> :wincmd l<CR>
-" resize horizontal split window
-nmap <silent> <C-S-Down> <C-W>-<C-W>-
-nmap <silent> <C-S-Up> <C-W>+<C-W>+
-" resize vertical split window
-nmap <silent> <C-S-Left> <C-W>><C-W>>
-nmap <silent> <C-S-Right> <C-W><<C-W><
 
 
-" plugins settings
-
+" plugins_settings
 let Tlist_Use_Right_Window = 1
 let Tlist_Sort_Type = "name"
 let Tlist_WinWidth = 40
@@ -240,11 +261,18 @@ set suffixesadd+=.js
 
 let g:limelight_conceal_ctermfg = 241
 
+let g:org_agenda_files = ['~/SyncFiles/OrgFiles/*.org']
+
+" vimwiki_settings
 let g:vimwiki_list = [
 	\ {'path': '~/vimwiki/default', 'syntax': 'markdown', 'ext': '.md'},
   \ {'path': '~/vimwiki/ofsc', 'syntax': 'markdown', 'ext': '.md'},
   \ {'path': '~/vimwiki/business', 'syntax': 'markdown', 'ext': '.md'},
-  \ {'path': '~/vimwiki/prose', 'syntax': 'markdown', 'ext': '.md'}]
+  \ {'path': '~/vimwiki/prose', 'syntax': 'markdown', 'ext': '.md'},
+  \ {'path': '~/vimwiki/pages', 'syntax': 'default', 'ext': 'wiki',
+          \ 'template_path': '~/vimwiki/templates/',
+          \ 'template_default': 'def_template',
+          \ 'template_ext': '.tpl'}]
 
 " let g:vimwiki_folding=""
 
