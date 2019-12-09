@@ -165,6 +165,11 @@ augroup GetGitBranch
   autocmd VimEnter,WinEnter,BufEnter * call StatuslineGitBranch()
 augroup END
 
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
 
 " hotkeys
 " copy_paste
@@ -173,30 +178,28 @@ map <C-k> "+p
 
 " Arrow keys remapping
 " switch prev/next buffer
-noremap <Left> :bp<CR>
-noremap <Right> :bn<CR>
-noremap <Up> :bn<CR>
-noremap <Down> :bp<CR>
+noremap <Left> :echo 'Not available. Use h instead'<CR>
+noremap <Right> :echo 'Not available. Use l instead'<CR>
+noremap <Up> :echo 'Not available. Use k instead'<CR>
+noremap <Down> :echo 'Not available. Use j instead'<CR>
 " switch window
-nmap <silent> <C-Up> :wincmd k<CR>
-nmap <silent> <C-Down> :wincmd j<CR>
-nmap <silent> <C-Left> :wincmd h<CR>
-nmap <silent> <C-Right> :wincmd l<CR>
+" nmap <silent> <C-Up> :wincmd k<CR>
+" nmap <silent> <C-Down> :wincmd j<CR>
+" nmap <silent> <C-Left> :wincmd h<CR>
+" nmap <silent> <C-Right> :wincmd l<CR>
 " resize horizontal/vertical split window
-nmap <silent> <C-S-Down> <C-W>-<C-W>-
-nmap <silent> <C-S-Up> <C-W>+<C-W>+
-nmap <silent> <C-S-Left> <C-W><<C-W><
-nmap <silent> <C-S-Right> <C-W>><C-W>>
+" nmap <silent> <C-S-Down> <C-W>-<C-W>-
+" nmap <silent> <C-S-Up> <C-W>+<C-W>+
+" nmap <silent> <C-S-Left> <C-W><<C-W><
+" nmap <silent> <C-S-Right> <C-W>><C-W>>
 
 " bind K to grep word under cursor
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-" normal
+" back to normal
 imap jj <Esc>
-" save
+" save and back to normal
 imap kk <Esc> :w<cr>
-" save + quit
-imap kj <Esc> :wq<cr>
 
 nmap <C-l> :NERDTreeFind<cr>
 " F6 <--> F7
@@ -221,6 +224,8 @@ imap <F6> <esc>:bp<cr>i
 map <F7> :bn<cr>
 vmap <F7> <esc>:bn<cr>i
 imap <F7> <esc>:bn<cr>i
+
+nmap <C-_> :Commentary<CR>
 
 " writing prose
 map <F8> :Goyo <bar> :Limelight!! <bar> :TogglePencil <CR>
