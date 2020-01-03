@@ -35,6 +35,7 @@ Plug 'junegunn/gv.vim'
 Plug 'vim-scripts/taglist.vim'
 Plug 'tpope/vim-commentary'
 Plug 'mikelue/vim-maven-plugin'
+Plug 'abyr/sline'
 " langs
 Plug 'editorconfig/editorconfig-vim'
 " writing
@@ -106,66 +107,6 @@ au BufRead,BufNewFile *.less set syntax=css
 " Fix <Enter> for comment
 set fo+=cr
 
-" status_line format
-" http://tdaly.co.uk/projects/vim-statusline-generator/
-set laststatus=2
-
-set statusline=                          " left align
-set statusline+=%2*\                     " blank char
-set statusline+=%2*\%{StatuslineMode()}
-set statusline+=%2*\                     " blank char
-set statusline+=%1*\ <<
-set statusline+=%1*\ %f                  " short filename
-set statusline+=%1*\ >>
-
-set statusline+=%1#warningmsg#
-set statusline+=%1*
-
-set statusline+=%=                       " right align
-set statusline+=%*
-set statusline+=%3*\%h%m%r               " file flags (help, read-only, modified)
-set statusline+=%4*\%{b:gitbranch}       " include git branch
-set statusline+=%3*\%.25F                " long filename (trimmed to 25 chars)
-set statusline+=%3*\::
-set statusline+=%3*\%l/%L\\|             " line count
-set statusline+=%3*\%y                   " file type
-set statusline+=%333*\                     " blank char
-set statusline+=%P                       " percent of file
-
-hi User1 ctermbg=black ctermfg=grey guibg=black guifg=grey
-hi User2 ctermbg=green ctermfg=black guibg=green guifg=black
-hi User3 ctermbg=black ctermfg=lightgreen guibg=black guifg=lightgreen
-
-function! StatuslineMode()
-  let l:mode=mode()
-  if l:mode==#"n"
-    return "NORMAL"
-  elseif l:mode==?"v"
-    return "VISUAL"
-  elseif l:mode==#"i"
-    return "INSERT"
-  elseif l:mode==#"R"
-    return "REPLACE"
-  endif
-endfunction
-
-function! StatuslineGitBranch()
-  let b:gitbranch=""
-  if &modifiable
-    lcd %:p:h
-    let l:gitrevparse=system("git rev-parse --abbrev-ref HEAD")
-    lcd -
-    if l:gitrevparse!~"fatal: not a git repository"
-      let b:gitbranch="(".substitute(l:gitrevparse, '\n', '', 'g').") "
-    endif
-  endif
-endfunction
-
-augroup GetGitBranch
-  autocmd!
-  autocmd VimEnter,WinEnter,BufEnter * call StatuslineGitBranch()
-augroup END
-
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
@@ -183,16 +124,6 @@ noremap <Left> :echo 'Not available. Use h instead'<CR>
 noremap <Right> :echo 'Not available. Use l instead'<CR>
 noremap <Up> :echo 'Not available. Use k instead'<CR>
 noremap <Down> :echo 'Not available. Use j instead'<CR>
-" switch window
-" nmap <silent> <C-Up> :wincmd k<CR>
-" nmap <silent> <C-Down> :wincmd j<CR>
-" nmap <silent> <C-Left> :wincmd h<CR>
-" nmap <silent> <C-Right> :wincmd l<CR>
-" resize horizontal/vertical split window
-" nmap <silent> <C-S-Down> <C-W>-<C-W>-
-" nmap <silent> <C-S-Up> <C-W>+<C-W>+
-" nmap <silent> <C-S-Left> <C-W><<C-W><
-" nmap <silent> <C-S-Right> <C-W>><C-W>>
 
 " bind K to grep word under cursor
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
