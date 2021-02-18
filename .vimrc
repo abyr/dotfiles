@@ -8,25 +8,26 @@
 
 " theming
 set background=dark
-"colorscheme hybrid
-" set background=light
 colorscheme PaperColor
 
 set guifont=Monospace\ 12
 
 " plugins
 call plug#begin('~/.vim/plugged')
+" local
+Plug '~/Workspace/org-b-foundation/vim-b-syntax-highlighting'
 " colors
 Plug 'vim-scripts/ScrollColors'
-Plug 'w0ng/vim-hybrid'
 Plug 'nlknguyen/papercolor-theme'
+
 " browser
 Plug 'scrooloose/nerdtree'
 Plug 'jlanzarotta/bufexplorer'
 Plug 'ap/vim-buftabline'
 Plug 'ervandew/supertab'
 Plug 'kien/ctrlp.vim'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 " git
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -34,10 +35,13 @@ Plug 'junegunn/gv.vim'
 " ide
 Plug 'vim-scripts/taglist.vim'
 Plug 'tpope/vim-commentary'
-Plug 'mikelue/vim-maven-plugin'
+Plug 'scrooloose/syntastic'
+" Plug 'rking/ag.vim'
+Plug 'mileszs/ack.vim'
 Plug 'abyr/sline'
 " langs
 Plug 'editorconfig/editorconfig-vim'
+Plug 'maksimr/vim-jsbeautify'
 " writing
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
@@ -45,7 +49,6 @@ Plug 'reedes/vim-pencil'
 " organiser
 Plug 'vimwiki/vimwiki'
 Plug 'tpope/vim-speeddating'
-Plug 'jceb/vim-orgmode'
 call plug#end()
 
 " settings
@@ -103,6 +106,7 @@ au BufReadPost *.mustache set syntax=html
 au BufNewFile,BufRead *.ejs set filetype=html
 au BufNewFile,BufRead *.html.twig set syntax=html
 au BufRead,BufNewFile *.less set syntax=css
+" autocmd BufNewFile,BufRead *.b setfiletype b
 
 " Fix <Enter> for comment
 set fo+=cr
@@ -114,9 +118,13 @@ let g:netrw_altv = 1
 let g:netrw_winsize = 25
 
 " hotkeys
-" copy_paste
-vnoremap <C-c> "+y
-map <C-k> "+p
+" Ctrl+V to paste the clipboard in normal and insert modes
+" Ctrl+c to copy to clipboard in visual mode.
+nmap <C-V> "+gP
+imap <C-V> <ESC><C-V>i
+vmap <C-C> "+y
+
+nmap <C-T> :FZF<CR>
 
 " Arrow keys remapping
 " switch prev/next buffer
@@ -158,6 +166,7 @@ vmap <F7> <esc>:bn<cr>i
 imap <F7> <esc>:bn<cr>i
 
 nmap <C-_> :Commentary<CR>
+nmap <C-i> :SyntasticToggleMode<CR>
 
 " writing prose
 map <F8> :Goyo <bar> :Limelight!! <bar> :TogglePencil <CR>
@@ -175,9 +184,18 @@ map <F9> :emenu Exit.<Tab>
 
 
 " plugins_settings
+" autocmd VimEnter * NERDTree
+autocmd VimEnter * NERDTree | wincmd p
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
+let g:NERDTreeDirArrowExpandable = '+'
+let g:NERDTreeDirArrowCollapsible = '-'
+
 let Tlist_Use_Right_Window = 1
 let Tlist_Sort_Type = "name"
 let Tlist_WinWidth = 40
+
+let g:fzf_command_prefix = 'Fzf'
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/vendor/*,*/\.git/*
 set wildignore+=*.pyc*,*.sql*
@@ -200,6 +218,19 @@ let g:limelight_conceal_ctermfg = 241
 
 let g:org_agenda_files = ['~/SyncFiles/OrgFiles/*.org']
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
+let g:syntastic_javascript_checkers=['eslint']
+
+if executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
+  set grepformat^=%f:%l:%c:%m   " file:line:column:message
+  let g:ackprg = 'ag --vimgrep'
+endif
+
 " vimwiki_settings
 let g:vimwiki_list = [
 	\ {'path': '~/vimwiki/default', 'syntax': 'markdown', 'ext': '.md'},
@@ -212,5 +243,4 @@ let g:vimwiki_list = [
           \ 'template_ext': '.tpl'}]
 
 " let g:vimwiki_folding=""
-
 "
