@@ -5,27 +5,23 @@
 " hotkeys
 " plugins_settings
 " vimwiki_settings
+" neovim
 
 " theming
-set background=dark
+" set background=dark
 colorscheme PaperColor
-
-set guifont=Monospace\ 12
 
 " plugins
 call plug#begin('~/.vim/plugged')
 " local
-Plug '~/Workspace/org-b-foundation/vim-b-syntax-highlighting'
+" Plug '~/Workspace/org-b-foundation/vim-b-syntax-highlighting'
+" Plug 'abyr/sline'
 " colors
 Plug 'vim-scripts/ScrollColors'
 Plug 'nlknguyen/papercolor-theme'
-
 " browser
 Plug 'scrooloose/nerdtree'
 Plug 'jlanzarotta/bufexplorer'
-Plug 'ap/vim-buftabline'
-Plug 'ervandew/supertab'
-Plug 'kien/ctrlp.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " git
@@ -33,12 +29,13 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
 " ide
+Plug 'itchyny/lightline.vim'
+Plug 'ap/vim-buftabline'
+Plug 'ervandew/supertab'
 Plug 'vim-scripts/taglist.vim'
 Plug 'tpope/vim-commentary'
 Plug 'scrooloose/syntastic'
-" Plug 'rking/ag.vim'
 Plug 'mileszs/ack.vim'
-Plug 'abyr/sline'
 " langs
 Plug 'editorconfig/editorconfig-vim'
 Plug 'maksimr/vim-jsbeautify'
@@ -124,7 +121,7 @@ nmap <C-V> "+gP
 imap <C-V> <ESC><C-V>i
 vmap <C-C> "+y
 
-nmap <C-T> :FZF<CR>
+nmap <C-P> :FZF<CR>
 
 " Arrow keys remapping
 " switch prev/next buffer
@@ -216,8 +213,6 @@ set suffixesadd+=.js
 
 let g:limelight_conceal_ctermfg = 241
 
-let g:org_agenda_files = ['~/SyncFiles/OrgFiles/*.org']
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
@@ -243,4 +238,11 @@ let g:vimwiki_list = [
           \ 'template_ext': '.tpl'}]
 
 " let g:vimwiki_folding=""
+
+
+" neovim
+if has('nvim')
+    " set termguicolors
+endif
+
 "
