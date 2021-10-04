@@ -1,4 +1,5 @@
 " TOC
+" variables
 " theming
 " plugins
 " settings
@@ -6,6 +7,11 @@
 " plugins_settings
 " vimwiki_settings
 " neovim
+
+
+" variables
+let s:SettingsOpenTree = 1
+
 
 " theming
 " set background=dark
@@ -181,12 +187,15 @@ map <F9> :emenu Exit.<Tab>
 
 
 " plugins_settings
-" autocmd VimEnter * NERDTree
-autocmd VimEnter * NERDTree | wincmd p
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-    \ quit | endif
-let g:NERDTreeDirArrowExpandable = '+'
-let g:NERDTreeDirArrowCollapsible = '-'
+
+if s:SettingsOpenTree == 1
+  " autocmd VimEnter * NERDTree
+  autocmd VimEnter * NERDTree | wincmd p
+  autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+      \ quit | endif
+  let g:NERDTreeDirArrowExpandable = '+'
+  let g:NERDTreeDirArrowCollapsible = '-'
+endif
 
 let Tlist_Use_Right_Window = 1
 let Tlist_Sort_Type = "name"
